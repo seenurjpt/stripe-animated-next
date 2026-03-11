@@ -33,51 +33,47 @@ const DrawnLine = ({ d, id, active }: { d: string, id: string, active: boolean }
     </>
 );
 
+// Stripe box center: (500, 300), ~112×112px → edges: left=444, right=556, top=244
 const desktopPaths = {
-    // Top sources
-    erpToSdk: "M 220 100 V 130 Q 220 140 230 140 H 340 Q 350 140 350 150 V 180",
-    crmToSdk: "M 350 100 V 180",
-    subsToSdk: "M 480 100 V 130 Q 480 140 470 140 H 360 Q 350 140 350 150 V 180",
-
-    // Top sources to Event Dest
-    legacyToEd: "M 640 100 V 130 Q 640 140 650 140 H 700 Q 710 140 710 150 V 180",
-    bookingToEd: "M 780 100 V 130 Q 780 140 770 140 H 720 Q 710 140 710 150 V 180",
-
-    // Intermediate to Stripe
-    sdkToStripe: "M 350 220 V 240 Q 350 260 370 265 L 430 280",
-    edToStripe: "M 710 220 V 240 Q 710 260 690 265 L 570 280",
+    // Top sources → directly into Stripe box
+    erpToStripe:     "M 220 100 V 180 Q 220 275 280 275 H 444",
+    crmToStripe:     "M 350 100 V 200 Q 350 244 400 244 H 466",
+    subsToStripe:    "M 480 100 V 220 Q 480 244 494 244",
+    legacyToStripe:  "M 640 100 V 200 Q 640 244 600 244 H 534",
+    bookingToStripe: "M 780 100 V 180 Q 780 275 720 275 H 556",
 
     // Flow inward from sides
-    gridToStripe: "M 220 300 H 430",
+    gridToStripe:   "M 220 300 H 430",
     marketToStripe: "M 380 300 H 430",
 
-    // Flow outward to rights
+    // Flow outward to right
     stripeToPipeline: "M 570 300 H 620",
-    pipelineToDb: "M 706 300 H 822",
+    pipelineToDb:     "M 706 300 H 822",
 
     // Flow to Orchestration
     stripeToOrch: "M 500 370 V 420",
 };
 
-// Mobile: top nodes rearranged into 2 rows
-//   Row 1 (y=72): ERP(240), Subscriptions(720)
-//   Row 2 (y=148): Legacy billing(290), Booking system(720)
+// Mobile: top nodes in 2 rows (3+2)
+//   Row 1 (y=72): ERP(215), CRM(490), Subscriptions(780)
+//   Row 2 (y=148): Legacy billing(340), Booking system(660)
 const mobilePaths = {
-    erpToSdk: "M 240 72 V 112 Q 240 124 254 124 H 338 Q 350 124 350 134 V 180",
-    subsToSdk: "M 720 72 V 112 Q 720 124 704 124 H 362 Q 350 124 350 134 V 180",
+    // Top sources → directly into Stripe box
+    erpToStripe:     "M 215 72 V 180 Q 215 275 275 275 H 444",
+    crmToStripe:     "M 490 72 V 220 Q 490 244 494 244",
+    subsToStripe:    "M 780 72 V 180 Q 780 275 720 275 H 556",
+    legacyToStripe:  "M 340 148 V 220 Q 340 280 390 280 H 444",
+    bookingToStripe: "M 660 148 V 220 Q 660 280 620 280 H 556",
 
-    legacyToEd: "M 290 148 V 162 Q 290 172 308 172 H 698 Q 710 172 710 178 V 180",
-    bookingToEd: "M 720 148 V 162 Q 720 172 716 172 H 722 Q 710 172 710 178 V 180",
-
-    sdkToStripe: "M 350 220 V 240 Q 350 260 370 265 L 430 280",
-    edToStripe: "M 710 220 V 240 Q 710 260 690 265 L 570 280",
-
-    gridToStripe: "M 220 300 H 430",
+    // Flow inward from sides
+    gridToStripe:   "M 220 300 H 430",
     marketToStripe: "M 380 300 H 430",
 
+    // Flow outward to right
     stripeToPipeline: "M 570 300 H 620",
-    pipelineToDb: "M 706 300 H 822",
+    pipelineToDb:     "M 706 300 H 822",
 
+    // Flow to Orchestration
     stripeToOrch: "M 500 370 V 420",
 };
 

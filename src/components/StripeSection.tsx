@@ -60,11 +60,27 @@ const DB_ICONS_MOB = [
   "/assets/azure-mob.png",
 ];
 
+// topTick: 0=idle, 1-5=build-up, 6-10=hold, 11-15=teardown, 16=idle
+const TOP_CYCLE = 17;
+const isTopActive = (index: number, topTick: number) => {
+  if (topTick >= 1 && topTick <= 10) return topTick > index;
+  if (topTick >= 11 && topTick <= 15) return 15 - topTick > index;
+  return false;
+};
+
 export default function StripeSection() {
   const [tick, setTick] = useState(0);
+  const [topTick, setTopTick] = useState(0);
   const [dbIdx, setDbIdx] = useState(0);
   const [scale, setScale] = useState(1);
   const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTopTick((prev) => (prev + 1) % TOP_CYCLE);
+    }, 700);
+    return () => clearInterval(timer);
+  }, []);
 
   useEffect(() => {
     const updateScale = () => {
@@ -132,52 +148,106 @@ export default function StripeSection() {
       >
         <ConnectingLines activeLines={activeLines} isMobile={isMobile} />
 
-        {/* Top Nodes — desktop: single row; mobile: two rows, CRM hidden */}
+        {/* Top Nodes — desktop: single row; mobile: two rows (3+2) */}
         {isMobile ? (
           <>
-            {/* Row 1 */}
-            <FloatingNode x={240} y={72}>
-              <NodeContent className='!bg-[#362baa]'>ERP</NodeContent>
+            {/* Row 1 — 3 nodes */}
+            <FloatingNode x={215} y={72}>
+              {isTopActive(0, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  ERP
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[55px]' />
+              )}
             </FloatingNode>
-            <FloatingNode x={720} y={72}>
-              <NodeContent className='!bg-[#362baa]'>Subscriptions</NodeContent>
+            <FloatingNode x={490} y={72}>
+              {isTopActive(1, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  CRM
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[58px]' />
+              )}
             </FloatingNode>
-            {/* Row 2 */}
-            <FloatingNode x={290} y={148}>
-              <NodeContent className='!bg-[#362baa]'>Legacy billing</NodeContent>
+            <FloatingNode x={780} y={72}>
+              {isTopActive(2, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  Subscriptions
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[110px]' />
+              )}
             </FloatingNode>
-            <FloatingNode x={720} y={148}>
-              <NodeContent className='!bg-[#362baa]'>Booking system</NodeContent>
+            {/* Row 2 — 2 nodes */}
+            <FloatingNode x={340} y={148}>
+              {isTopActive(3, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  Legacy billing
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[105px]' />
+              )}
+            </FloatingNode>
+            <FloatingNode x={660} y={148}>
+              {isTopActive(4, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  Booking system
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[115px]' />
+              )}
             </FloatingNode>
           </>
         ) : (
           <>
             <FloatingNode x={220} y={100}>
-              <NodeContent className='!bg-[#362baa]'>ERP</NodeContent>
+              {isTopActive(0, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  ERP
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[55px]' />
+              )}
             </FloatingNode>
             <FloatingNode x={350} y={100}>
-              <NodeContent className='!bg-[#362baa]'>CRM</NodeContent>
+              {isTopActive(1, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  CRM
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[58px]' />
+              )}
             </FloatingNode>
             <FloatingNode x={480} y={100}>
-              <NodeContent className='!bg-[#362baa]'>Subscriptions</NodeContent>
+              {isTopActive(2, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  Subscriptions
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[110px]' />
+              )}
             </FloatingNode>
             <FloatingNode x={640} y={100}>
-              <NodeContent className='!bg-[#362baa]'>Legacy billing</NodeContent>
+              {isTopActive(3, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  Legacy billing
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[105px]' />
+              )}
             </FloatingNode>
             <FloatingNode x={780} y={100}>
-              <NodeContent className='!bg-[#362baa]'>Booking system</NodeContent>
+              {isTopActive(4, topTick) ? (
+                <NodeContent className='!bg-[#362baa] animate-[swipeReveal_0.7s_cubic-bezier(0.2,0.8,0.2,1)_forwards]'>
+                  Booking system
+                </NodeContent>
+              ) : (
+                <DashedBox className='!w-[115px]' />
+              )}
             </FloatingNode>
           </>
         )}
-
-        {/* Mid Nodes (Fixed) */}
-        <FloatingNode x={350} y={200}>
-          <NodeContent>SDK</NodeContent>
-        </FloatingNode>
-
-        <FloatingNode x={710} y={200}>
-          <NodeContent>Event Destinations</NodeContent>
-        </FloatingNode>
 
         {/* Left side (Fixed/Grid) */}
         <FloatingNode x={350} y={300}>
