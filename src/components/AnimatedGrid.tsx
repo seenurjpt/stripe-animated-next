@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
-const ICONS = [
+const ICONS_WEB = [
     "/assets/aws-web.png",
     "/assets/azure-web.png",
     "/assets/chatgpt-web.png",
@@ -32,10 +32,39 @@ const ICONS = [
     "/assets/zapier-web.png",
 ];
 
-export default function AnimatedGrid() {
+const ICONS_MOB = [
+    "/assets/aws-mob.png",
+    "/assets/azure-mob.png",
+    "/assets/chatgpt-mob.png",
+    "/assets/copilot-mob.png",
+    "/assets/crewai-mob.png",
+    "/assets/docker-mob.png",
+    "/assets/fastapi-mob.png",
+    "/assets/github-mob.png",
+    "/assets/google-cloude-mob.png",
+    "/assets/jira-mob.png",
+    "/assets/langchain-mob.png",
+    "/assets/mongodb-mob.png",
+    "/assets/n8n-mob.png",
+    "/assets/pine-coin-1.png",
+    "/assets/postgresql-mob.png",
+    "/assets/postman-mob.png",
+    "/assets/pyspark-mob.png",
+    "/assets/python-mob.png",
+    "/assets/pytorch-mob.png",
+    "/assets/react-mob.png",
+    "/assets/slack-mob.png",
+    "/assets/sql-mob.png",
+    "/assets/tensorflow-mob.png",
+    "/assets/vercel-mob.png",
+    "/assets/vs-code-mob.png",
+    "/assets/zapier-mob.png",
+];
+
+export default function AnimatedGrid({ isMobile = false }: { isMobile?: boolean }) {
+    const ICONS = isMobile ? ICONS_MOB : ICONS_WEB;
     const [slots, setSlots] = useState<(string | "EMPTY")[]>(["EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY", "EMPTY"]);
 
-    // Initial population matching crop (roughly)
     useEffect(() => {
         setSlots([
             ICONS[Math.floor(Math.random() * ICONS.length)],
@@ -45,7 +74,8 @@ export default function AnimatedGrid() {
             ICONS[Math.floor(Math.random() * ICONS.length)],
             ICONS[Math.floor(Math.random() * ICONS.length)],
         ]);
-    }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMobile]);
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -65,8 +95,8 @@ export default function AnimatedGrid() {
             });
         }, 2000);
         return () => clearInterval(timer);
-    }, []);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMobile]);
 
     return (
         <div className="grid grid-cols-3 gap-2 bg-[#0a0e17]/90 p-3 rounded-2xl border border-[#1e2336] shadow-2xl">

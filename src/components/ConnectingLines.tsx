@@ -33,32 +33,62 @@ const DrawnLine = ({ d, id, active }: { d: string, id: string, active: boolean }
     </>
 );
 
-export default function ConnectingLines({ activeLines = [false, false, false, false] }: { activeLines?: boolean[] }) {
-    const paths = {
-        // Top sources
-        erpToSdk: "M 220 100 V 130 Q 220 140 230 140 H 340 Q 350 140 350 150 V 180",
-        crmToSdk: "M 350 100 V 180",
-        subsToSdk: "M 480 100 V 130 Q 480 140 470 140 H 360 Q 350 140 350 150 V 180",
+const desktopPaths = {
+    // Top sources
+    erpToSdk: "M 220 100 V 130 Q 220 140 230 140 H 340 Q 350 140 350 150 V 180",
+    crmToSdk: "M 350 100 V 180",
+    subsToSdk: "M 480 100 V 130 Q 480 140 470 140 H 360 Q 350 140 350 150 V 180",
 
-        // Top sources to Event Dest
-        legacyToEd: "M 640 100 V 130 Q 640 140 650 140 H 700 Q 710 140 710 150 V 180",
-        bookingToEd: "M 780 100 V 130 Q 780 140 770 140 H 720 Q 710 140 710 150 V 180",
+    // Top sources to Event Dest
+    legacyToEd: "M 640 100 V 130 Q 640 140 650 140 H 700 Q 710 140 710 150 V 180",
+    bookingToEd: "M 780 100 V 130 Q 780 140 770 140 H 720 Q 710 140 710 150 V 180",
 
-        // Intermediate to Stripe
-        sdkToStripe: "M 350 220 V 240 Q 350 260 370 265 L 430 280",
-        edToStripe: "M 710 220 V 240 Q 710 260 690 265 L 570 280",
+    // Intermediate to Stripe
+    sdkToStripe: "M 350 220 V 240 Q 350 260 370 265 L 430 280",
+    edToStripe: "M 710 220 V 240 Q 710 260 690 265 L 570 280",
 
-        // Flow inward from sides
-        gridToStripe: "M 220 300 H 430",
-        marketToStripe: "M 380 300 H 430",
+    // Flow inward from sides
+    gridToStripe: "M 220 300 H 430",
+    marketToStripe: "M 380 300 H 430",
 
-        // Flow outward to rights
-        stripeToPipeline: "M 570 300 H 620",
-        pipelineToDb: "M 706 300 H 822",
+    // Flow outward to rights
+    stripeToPipeline: "M 570 300 H 620",
+    pipelineToDb: "M 706 300 H 822",
 
-        // Flow to Orchestration
-        stripeToOrch: "M 500 370 V 420",
-    };
+    // Flow to Orchestration
+    stripeToOrch: "M 500 370 V 420",
+};
+
+// Mobile: top nodes rearranged into 2 rows
+//   Row 1 (y=72): ERP(240), Subscriptions(720)
+//   Row 2 (y=148): Legacy billing(290), Booking system(720)
+const mobilePaths = {
+    erpToSdk: "M 240 72 V 112 Q 240 124 254 124 H 338 Q 350 124 350 134 V 180",
+    subsToSdk: "M 720 72 V 112 Q 720 124 704 124 H 362 Q 350 124 350 134 V 180",
+
+    legacyToEd: "M 290 148 V 162 Q 290 172 308 172 H 698 Q 710 172 710 178 V 180",
+    bookingToEd: "M 720 148 V 162 Q 720 172 716 172 H 722 Q 710 172 710 178 V 180",
+
+    sdkToStripe: "M 350 220 V 240 Q 350 260 370 265 L 430 280",
+    edToStripe: "M 710 220 V 240 Q 710 260 690 265 L 570 280",
+
+    gridToStripe: "M 220 300 H 430",
+    marketToStripe: "M 380 300 H 430",
+
+    stripeToPipeline: "M 570 300 H 620",
+    pipelineToDb: "M 706 300 H 822",
+
+    stripeToOrch: "M 500 370 V 420",
+};
+
+export default function ConnectingLines({
+    activeLines = [false, false, false, false],
+    isMobile = false,
+}: {
+    activeLines?: boolean[];
+    isMobile?: boolean;
+}) {
+    const paths = isMobile ? mobilePaths : desktopPaths;
 
     const bottomPaths = [
         "M 500 460 V 490 H 350 V 520",
